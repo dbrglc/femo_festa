@@ -37,6 +37,8 @@ Struttura il progetto con una classifica pubblica in Astro e un’area ordine pr
    - Verificare che la classifica sia visibile senza login.
    - Verificare accesso protetto all’area ordini e invio con token.
    - Verificare aggiornamenti realtime della classifica pubblica.
+7. Creare una cartella `shared/` per tipi comuni a frontend e backend.
+   - Definire interfacce TypeScript per modelli di dati condivisi (es. Team, Order).
 
 **Relevant files**
 - `frontend/package.json` — dipendenze Astro e script build.
@@ -56,6 +58,7 @@ Struttura il progetto con una classifica pubblica in Astro e un’area ordine pr
 - `infra/lib/stacks/WebSocketStack.ts` — WebSocket API.
 - `infra/lib/stacks/FrontendStack.ts` — hosting S3/CloudFront.
 - `.github/workflows/deploy.yml` — pipeline CI/CD.
+- `shared/types.ts` — definizioni TypeScript condivise.
 
 **Verification**
 1. `frontend/` builda con Astro.
@@ -64,6 +67,7 @@ Struttura il progetto con una classifica pubblica in Astro e un’area ordine pr
 4. Solo `POST /orders` richiede Authorization header valido.
 5. I client pubblici ricevono aggiornamenti realtime dopo un ordine.
 6. Workflow GitHub Actions esegue build e deploy in dev.
+7. I tipi comuni sono definiti in `shared/` e importati correttamente in FE e BE.
 
 **Decisions**
 - La classifica è pubblica e accessibile a chiunque.
@@ -71,8 +75,10 @@ Struttura il progetto con una classifica pubblica in Astro e un’area ordine pr
 - Il backend rimane minimale con lambda per API e WebSocket.
 - Astro è usato come shell mobile-first e UI leggera.
 - CDK gestisce dev/prod, resourcing e hosting.
+- Aggiungere una cartella `shared/` per tipi comuni per mantenere consistenza tra FE e BE.
 
 **Further Considerations**
 1. Se vuoi minimizzare la complessità frontend, usa il Cognito Hosted UI solo per login e conserva la classifica in una pagina separata.
 2. La WebSocket API invierà sempre l'intero stato per ridurre traffico.
 3. Abilitare logging CloudWatch per Lambda, API Gateway e DynamoDB per monitoraggio, debug e alerting su errori.
+4. La cartella `shared/` deve essere accessibile sia da frontend che backend, possibilmente tramite symlink o copia durante il build.
