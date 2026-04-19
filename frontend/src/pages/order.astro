@@ -1,0 +1,90 @@
+---
+import { getLoginUrl, logout, getAccessToken, parseHashToken } from '../auth/cognito.ts';
+const title = 'Area ordini';
+---
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <h1>{title}</h1>
+      <button id="authButton">Login con Cognito</button>
+      <form id="orderForm" style="display:none; margin-top:1rem;">
+        <label>
+          Squadra
+          <input type="text" name="teamName" required />
+        </label>
+        <label>
+          Punteggio
+          <input type="number" name="score" required min="0" />
+        </label>
+        <button type="submit">Invia ordine</button>
+      </form>
+      <div id="message" style="margin-top:1rem"></div>
+    </main>
+    <script type="module">
+      import { getLoginUrl, logout, getAccessToken, parseHashToken } from '../auth/cognito.ts';
+
+      const authButton = document.getElementById('authButton');
+      const orderForm = document.getElementById('orderForm');
+      const message = document.getElementById('message');
+      const token = parseHashToken() || getAccessToken();
+
+      const setLoggedIn = (hasToken) => {
+        if (hasToken) {
+          authButton.textContent = 'Logout';
+          orderForm.style.display = 'block';
+        } else {
+          authButton.textContent = 'Login con Cognito';
+          orderForm.style.display = 'none';
+        }
+      };
+
+      setLoggedIn(Boolean(token));
+
+      authButton.addEventListener('click', () => {
+        if (getAccessToken()) {
+          logout();
+        } else {
+          window.location.href = getLoginUrl();
+        }
+      });
+
+      orderForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = new FormData(orderForm);
+        const body = {
+          teamName: form.get('teamName'),
+          score: Number(form.get('score')),
+        };
+
+        const accessToken = getAccessToken();
+        if (!accessToken) {
+          message.textContent = 'Devi essere autenticato per inviare un ordine.';
+          return;
+        }
+
+        const response = await fetch('/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(body),
+        });
+
+        if (response.ok) {
+          message.textContent = 'Ordine inviato con successo.';
+          orderForm.reset();
+        } else {
+          const error = await response.text();
+          message.textContent = `Errore: ${error}`;
+        }
+      });
+    </script>
+  </body>
+</html>

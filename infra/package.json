@@ -1,0 +1,13 @@
+{
+  "name": "femo-festa-infra",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "aws-cdk-lib": "^2.99.0",
+    "constructs": "^10.0.0",
+    "typescript": "^5.6.0",
+    "ts-node": "^10.9.1",
+    "@aws-cdk/aws-apigatewayv2-alpha": "^2.99.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.99.0"
+  }
+}
