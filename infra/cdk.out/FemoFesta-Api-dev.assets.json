@@ -1,0 +1,36 @@
+{
+  "version": "53.0.0",
+  "files": {
+    "1928a5203fe2b2e06074f1f13042d65ac4d5ef7a6f0fe1c7ddfcadb2cf549a8b": {
+      "displayName": "LeaderboardFunction/Code",
+      "source": {
+        "path": "asset.1928a5203fe2b2e06074f1f13042d65ac4d5ef7a6f0fe1c7ddfcadb2cf549a8b",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-eu-south-1-86960156": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-eu-south-1",
+          "objectKey": "1928a5203fe2b2e06074f1f13042d65ac4d5ef7a6f0fe1c7ddfcadb2cf549a8b.zip",
+          "region": "eu-south-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-eu-south-1"
+        }
+      }
+    },
+    "6aa508ace5ea135dee62b5e4f7fe59e3708c465817f257efdd4d99da4143fdf4": {
+      "displayName": "FemoFesta-Api-dev Template",
+      "source": {
+        "path": "FemoFesta-Api-dev.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-eu-south-1-53f6ab1d": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-eu-south-1",
+          "objectKey": "6aa508ace5ea135dee62b5e4f7fe59e3708c465817f257efdd4d99da4143fdf4.json",
+          "region": "eu-south-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-eu-south-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

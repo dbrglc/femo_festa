@@ -8,10 +8,7 @@
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "..",
-    "outDir": "dist",
-    "paths": {
-      "@shared/*": ["../shared/*"]
-    }
+    "outDir": "dist"
   },
-  "include": ["src/**/*.ts", "../shared/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }

@@ -1,0 +1,92 @@
+{
+  "/FemoFesta-WebSocket-dev/WebSocketApiUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "WebSocketApiUrl"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/ConnectHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ConnectHandler2FFD52D8"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/DisconnectHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DisconnectHandlerCB7ED6F7"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/FemoFestaWebSocketApi/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaWebSocketApiD49F347E"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/ConnectHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ConnectHandlerServiceRole7E4A9B1F"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/DisconnectHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DisconnectHandlerServiceRoleE54F14F9"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/FemoFestaWebSocketApi/$connect-Route/ConnectIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaWebSocketApiconnectRouteConnectIntegrationPermissionBB3F4680"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/FemoFestaWebSocketApi/$connect-Route/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaWebSocketApiconnectRoute75668606"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/FemoFestaWebSocketApi/$disconnect-Route/DisconnectIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaWebSocketApidisconnectRouteDisconnectIntegrationPermission1076DCF0"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/FemoFestaWebSocketApi/$disconnect-Route/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaWebSocketApidisconnectRouteF8282290"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/FemoFestaWebSocketApi/$connect-Route/ConnectIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaWebSocketApiconnectRouteConnectIntegration73935B3E"
+    }
+  ],
+  "/FemoFesta-WebSocket-dev/FemoFestaWebSocketApi/$disconnect-Route/DisconnectIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaWebSocketApidisconnectRouteDisconnectIntegrationEBAF2CBC"
+    }
+  ]
+}

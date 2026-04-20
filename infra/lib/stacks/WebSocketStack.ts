@@ -1,8 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Stack, StackProps } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as apigwv2 from '@aws-cdk/aws-apigatewayv2-alpha';
-import * as integrations from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
+import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 
 interface WebSocketStackProps extends StackProps {
   stage: string;
@@ -13,15 +13,15 @@ export class WebSocketStack extends Stack {
     super(scope, id, props);
 
     const connectFn = new lambda.Function(this, 'ConnectHandler', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'websocketHandlers.connectHandler',
-      code: lambda.Code.fromAsset('../../backend/dist'),
+      code: lambda.Code.fromAsset('../backend/dist'),
     });
 
     const disconnectFn = new lambda.Function(this, 'DisconnectHandler', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'websocketHandlers.disconnectHandler',
-      code: lambda.Code.fromAsset('../../backend/dist'),
+      code: lambda.Code.fromAsset('../backend/dist'),
     });
 
     const wsApi = new apigwv2.WebSocketApi(this, 'FemoFestaWebSocketApi', {

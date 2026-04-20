@@ -1,5 +1,5 @@
 import { useWebSocket } from '../hooks/useWebSocket.ts';
-import type { Team, WebSocketUpdate } from '../../shared/types.ts';
+import type { Team, WebSocketUpdate } from '@repo/shared';
 
 const API_LEADERBOARD = '/leaderboard';
 const WS_URL = 'wss://your-websocket-endpoint';

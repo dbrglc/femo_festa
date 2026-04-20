@@ -1,0 +1,98 @@
+{
+  "/FemoFesta-Api-dev/HttpApiUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "HttpApiUrl"
+    }
+  ],
+  "/FemoFesta-Api-dev/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/FemoFesta-Api-dev/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/FemoFesta-Api-dev/LeaderboardFunction/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LeaderboardFunctionBB24928E"
+    }
+  ],
+  "/FemoFesta-Api-dev/SubmitOrderFunction/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "SubmitOrderFunctionB8C51FF7"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApi195D23D1"
+    }
+  ],
+  "/FemoFesta-Api-dev/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ],
+  "/FemoFesta-Api-dev/LeaderboardFunction/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LeaderboardFunctionServiceRoleF6FB4E9A"
+    }
+  ],
+  "/FemoFesta-Api-dev/SubmitOrderFunction/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "SubmitOrderFunctionServiceRoleA23BC4F7"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/DefaultStage/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApiDefaultStage533C4011"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/GET--leaderboard/LeaderboardIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApiGETleaderboardLeaderboardIntegrationPermission4AC5358D"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/GET--leaderboard/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApiGETleaderboard1F54110D"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/POST--orders/OrdersIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApiPOSTordersOrdersIntegrationPermission1ACB82B6"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/POST--orders/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApiPOSTorders2B87A609"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/GET--leaderboard/LeaderboardIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApiGETleaderboardLeaderboardIntegration6F5A7B00"
+    }
+  ],
+  "/FemoFesta-Api-dev/FemoFestaHttpApi/POST--orders/OrdersIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "FemoFestaHttpApiPOSTordersOrdersIntegrationDF4B4173"
+    }
+  ]
+}

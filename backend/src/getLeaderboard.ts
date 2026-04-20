@@ -1,5 +1,5 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import type { Team } from '@shared/types.ts';
+import type { Team } from '@repo/shared';
 
 const sampleLeaderboard: Team[] = [
   { name: 'Team A', score: 320 },

@@ -1,0 +1,60 @@
+{
+  "/FemoFesta-Dynamo-dev/LeaderboardTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "LeaderboardTableD83EA9BE"
+      }
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/ConnectionsTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "ConnectionsTable8000B8A1"
+      }
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/LeaderboardTableName": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LeaderboardTableName"
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/ConnectionsTableName": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ConnectionsTableName"
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/LeaderboardTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LeaderboardTableD83EA9BE"
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/ConnectionsTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ConnectionsTable8000B8A1"
+    }
+  ],
+  "/FemoFesta-Dynamo-dev/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ]
+}
