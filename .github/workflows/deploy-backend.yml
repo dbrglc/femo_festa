@@ -6,6 +6,7 @@ on:
       - 'backend/**'
       - 'infra/**'
       - 'shared/**'
+  workflow_dispatch:
 
 jobs:
   build:
