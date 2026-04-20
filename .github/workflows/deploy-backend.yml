@@ -50,3 +50,19 @@ jobs:
         run: |
           cd infra
           npx cdk synth
+
+      - name: Configure AWS Credentials for China region audience
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          audience: sts.amazonaws.com.cn
+          aws-region: eu-south-1
+          role-to-assume: arn:aws:iam::461113893596:oidc-provider/token.actions.githubusercontent.com
+
+      - name: Get caller identity
+        run: |
+          aws sts get-caller-identity
+
+      - name: Deploy CDK stack
+        run: |
+          cd infra
+          npx cdk deploy --require-approval never
