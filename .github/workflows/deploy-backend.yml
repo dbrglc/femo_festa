@@ -69,4 +69,4 @@ jobs:
       - name: Deploy CDK stack
         run: |
           cd infra
-          npx cdk deploy --require-approval never
+          npx cdk deploy --all --require-approval never
