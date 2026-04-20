@@ -56,7 +56,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: eu-south-1
-          role-to-assume: arn:aws:iam::461113893596:oidc-provider/token.actions.githubusercontent.com
+          role-to-assume: arn:aws:iam::461113893596:role/github_actions_deploy
 
       - name: Get caller identity
         run: |
