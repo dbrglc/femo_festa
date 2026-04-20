@@ -20,6 +20,16 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Install share dependencies
+        run: |
+          cd shared
+          npm install
+
+      - name: Build shared
+        run: |
+          cd shared
+          npm run build
+
       - name: Install backend dependencies
         run: |
           cd backend
