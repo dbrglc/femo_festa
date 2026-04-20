@@ -1,6 +1,6 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { validateJwt } from './jwtValidator.ts';
-import type { Order } from '@shared/types';
+import { validateJwt } from './jwtValidator.js';
+import type { Order } from '@shared/types.ts';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
