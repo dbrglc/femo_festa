@@ -51,10 +51,10 @@ jobs:
           cd infra
           npx cdk synth
 
-      - name: Configure AWS Credentials for China region audience
+      - name: Configure AWS Credentials for Milan region audience
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
-          audience: sts.amazonaws.com.cn
+          audience: sts.amazonaws.com
           aws-region: eu-south-1
           role-to-assume: arn:aws:iam::461113893596:oidc-provider/token.actions.githubusercontent.com
 
