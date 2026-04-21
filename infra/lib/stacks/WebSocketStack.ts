@@ -14,13 +14,13 @@ export class WebSocketStack extends Stack {
     super(scope, id, props);
     
     const connectFn = new NodejsFunction(this, 'ConnectHandler', {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/websocketHandlers.ts',
       handler: 'connectHandler'
     });
 
     const disconnectFn = new NodejsFunction(this, 'DisconnectHandler', {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/websocketHandlers.ts',
       handler: 'disconnectHandler'
     });
@@ -34,6 +34,12 @@ export class WebSocketStack extends Stack {
     });
     wsApi.addRoute('$disconnect', {
       integration: new integrations.WebSocketLambdaIntegration('DisconnectIntegration', disconnectFn),
+    });
+
+    new apigwv2.WebSocketStage(this, 'WebSocketStage', {
+      webSocketApi: wsApi,
+      stageName: props.stage,
+      autoDeploy: true,
     });
 
     new cdk.CfnOutput(this, 'WebSocketApiUrl', { value: wsApi.apiEndpoint });

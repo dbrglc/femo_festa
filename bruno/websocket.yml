@@ -1,0 +1,14 @@
+info:
+  name: websocket
+  type: websocket
+  seq: 2
+
+websocket:
+  url: "{{wss-base-url}}"
+  message:
+    type: json
+    data: '{"prova":"prova"}'
+
+settings:
+  timeout: 0
+  keepAliveInterval: 0

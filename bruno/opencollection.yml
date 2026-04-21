@@ -1,0 +1,10 @@
+opencollection: 1.0.0
+
+info:
+  name: femo_festa
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
