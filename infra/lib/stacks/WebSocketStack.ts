@@ -15,13 +15,13 @@ export class WebSocketStack extends Stack {
     const connectFn = new lambda.Function(this, 'ConnectHandler', {
       runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'websocketHandlers.connectHandler',
-      code: lambda.Code.fromAsset('../backend/dist'),
+      code: lambda.Code.fromAsset('../backend/dist/backend/src'),
     });
 
     const disconnectFn = new lambda.Function(this, 'DisconnectHandler', {
       runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'websocketHandlers.disconnectHandler',
-      code: lambda.Code.fromAsset('../backend/dist'),
+      code: lambda.Code.fromAsset('../backend/dist/backend/src'),
     });
 
     const wsApi = new apigwv2.WebSocketApi(this, 'FemoFestaWebSocketApi', {

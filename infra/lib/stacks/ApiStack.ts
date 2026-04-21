@@ -17,7 +17,7 @@ export class ApiStack extends Stack {
     const apiLambda = new lambda.Function(this, 'LeaderboardFunction', {
       runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'getLeaderboard.handler',
-      code: lambda.Code.fromAsset('../backend/dist'),
+      code: lambda.Code.fromAsset('../backend/dist/backend/src'),
       environment: {
         STAGE: props.stage,
       },
@@ -26,7 +26,7 @@ export class ApiStack extends Stack {
     const ordersLambda = new lambda.Function(this, 'SubmitOrderFunction', {
       runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'submitOrder.handler',
-      code: lambda.Code.fromAsset('../backend/dist'),
+      code: lambda.Code.fromAsset('../backend/dist/backend/src'),
       environment: {
         STAGE: props.stage,
       },
