@@ -1,9 +1,10 @@
 import * as cdk from 'aws-cdk-lib';
-import { Stack, StackProps } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 
 interface ApiStackProps extends StackProps {
   stage: string;
@@ -14,19 +15,19 @@ export class ApiStack extends Stack {
   constructor(scope: cdk.App, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const apiLambda = new lambda.Function(this, 'LeaderboardFunction', {
+    const apiLambda = new NodejsFunction(this, 'LeaderboardFunction', {
       runtime: lambda.Runtime.NODEJS_24_X,
-      handler: 'getLeaderboard.handler',
-      code: lambda.Code.fromAsset('../backend/dist/backend/src'),
+      entry: '../backend/src/getLeaderboard.ts',
+      handler: 'handler',
       environment: {
         STAGE: props.stage,
       },
     });
 
-    const ordersLambda = new lambda.Function(this, 'SubmitOrderFunction', {
+    const ordersLambda = new NodejsFunction(this, 'SubmitOrderFunction', {
       runtime: lambda.Runtime.NODEJS_24_X,
-      handler: 'submitOrder.handler',
-      code: lambda.Code.fromAsset('../backend/dist/backend/src'),
+      entry: '../backend/src/submitOrder.ts',
+      handler: 'handler',
       environment: {
         STAGE: props.stage,
       },
