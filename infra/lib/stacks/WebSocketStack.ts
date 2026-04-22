@@ -34,6 +34,9 @@ export class WebSocketStack extends Stack {
         WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
       }
     });
+    
+    props.connectionsTable.grantReadWriteData(connectFn);
+    props.connectionsTable.grantReadWriteData(disconnectFn);
 
     const wsApi = new apigwv2.WebSocketApi(this, 'FemoFestaWebSocketApi', {
       apiName: `femo-festa-ws-${props.stage}`,
