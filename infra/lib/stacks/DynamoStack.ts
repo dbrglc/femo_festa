@@ -4,6 +4,8 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
 interface DynamoStackProps extends StackProps {
   stage: string;
+  leaderboardTable: string;
+  connectionsTable: string;
 }
 
 export class DynamoStack extends Stack {
@@ -14,13 +16,13 @@ export class DynamoStack extends Stack {
     super(scope, id, props);
 
     this.leaderboardTable = new dynamodb.Table(this, 'LeaderboardTable', {
-      tableName: `femo-festa-leaderboard-${props.stage}`,
+      tableName: `${props.leaderboardTable}`,
       partitionKey: { name: 'teamName', type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     this.connectionsTable = new dynamodb.Table(this, 'ConnectionsTable', {
-      tableName: `femo-festa-connections-${props.stage}`,
+      tableName: `${props.connectionsTable}`,
       partitionKey: { name: 'connectionId', type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });

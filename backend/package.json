@@ -5,9 +5,15 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.600.0",
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/util-dynamodb": "^3.600.0"
   },
   "devDependencies": {
+    "@types/node": "^20.11.0",
     "@types/aws-lambda": "^8.10.161",
     "typescript": "^6.0.0"
   }

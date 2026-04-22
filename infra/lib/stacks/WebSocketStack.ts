@@ -7,6 +7,7 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 
 interface WebSocketStackProps extends StackProps {
   stage: string;
+  connectionsTable: string;
 }
 
 export class WebSocketStack extends Stack {
@@ -15,14 +16,22 @@ export class WebSocketStack extends Stack {
     
     const connectFn = new NodejsFunction(this, 'ConnectHandler', {
       runtime: lambda.Runtime.NODEJS_24_X,
-      entry: '../backend/src/websocketHandlers.ts',
-      handler: 'connectHandler'
+      entry: '../backend/src/websocket/websocketConnect.ts',
+      handler: 'connectHandler',
+      environment: {
+        STAGE: props.stage,
+        WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable,
+      }
     });
 
     const disconnectFn = new NodejsFunction(this, 'DisconnectHandler', {
       runtime: lambda.Runtime.NODEJS_24_X,
-      entry: '../backend/src/websocketHandlers.ts',
-      handler: 'disconnectHandler'
+      entry: '../backend/src/websocket/websocketDisconnect.ts',
+      handler: 'disconnectHandler',
+      environment: {
+        STAGE: props.stage,
+        WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable,
+      }
     });
 
     const wsApi = new apigwv2.WebSocketApi(this, 'FemoFestaWebSocketApi', {

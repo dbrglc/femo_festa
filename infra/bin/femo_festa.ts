@@ -13,9 +13,11 @@ const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
   region: process.env.CDK_DEFAULT_REGION || 'us-south-1',
 };
+const leaderboardTable = `femo-festa-leaderboard-${stage}`;
+const connectionsTable = `femo-festa-connections-${stage}`;
 
-const dynamo = new DynamoStack(app, `FemoFesta-Dynamo-${stage}`, { env, stage });
+const dynamo = new DynamoStack(app, `FemoFesta-Dynamo-${stage}`, { env, stage, leaderboardTable, connectionsTable });
 const auth = new AuthStack(app, `FemoFesta-Auth-${stage}`, { env, stage });
 const api = new ApiStack(app, `FemoFesta-Api-${stage}`, { env, stage, userPool: auth.userPool });
-const websocket = new WebSocketStack(app, `FemoFesta-WebSocket-${stage}`, { env, stage });
+const websocket = new WebSocketStack(app, `FemoFesta-WebSocket-${stage}`, { env, stage, connectionsTable });
 new FrontendStack(app, `FemoFesta-Frontend-${stage}`, { env, stage });
