@@ -29,11 +29,6 @@ export class WebSocketStack extends Stack {
       runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/websocket/websocketBroadcast.ts',
       handler: 'broadcastHandler',
-      bundling: {
-        minify: false,
-        sourceMap: false,
-        externalModules: []
-      },
       environment: {
         STAGE: props.stage,
         WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
@@ -55,11 +50,6 @@ export class WebSocketStack extends Stack {
       runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/websocket/websocketConnect.ts',
       handler: 'connectHandler',
-      bundling: {
-        minify: false,
-        sourceMap: false,
-        externalModules: []
-      },
       environment: {
         STAGE: props.stage,
           WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
@@ -83,11 +73,6 @@ export class WebSocketStack extends Stack {
       runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/websocket/websocketDisconnect.ts',
       handler: 'disconnectHandler',
-      bundling: {
-        minify: false,
-        sourceMap: false,
-        externalModules: []
-      },
       environment: {
         STAGE: props.stage,
         WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,

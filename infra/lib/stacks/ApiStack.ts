@@ -21,11 +21,6 @@ export class ApiStack extends Stack {
       runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/submitOrder.ts',
       handler: 'handler',
-      bundling: {
-        minify: false,
-        sourceMap: false,
-        externalModules: []
-      },
       environment: {
         STAGE: props.stage,
         LEADERBOARD_TABLE_NAME: props.leaderboardTable.tableName,
