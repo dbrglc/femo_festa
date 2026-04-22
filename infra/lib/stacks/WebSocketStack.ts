@@ -34,9 +34,20 @@ export class WebSocketStack extends Stack {
         WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
       }
     });
+
+    const broadcastFn = new NodejsFunction(this, 'BroadcastHandler', {
+      runtime: lambda.Runtime.NODEJS_24_X,
+      entry: '../backend/src/websocket/websocketBroadcast.ts',
+      handler: 'broadcastHandler',
+      environment: {
+        STAGE: props.stage,
+        WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
+      }
+    });
     
-    props.connectionsTable.grantReadWriteData(connectFn);
-    props.connectionsTable.grantReadWriteData(disconnectFn);
+    props.connectionsTable.grantWriteData(connectFn);
+    props.connectionsTable.grantWriteData(disconnectFn);
+    props.connectionsTable.grantReadData(broadcastFn);
 
     const wsApi = new apigwv2.WebSocketApi(this, 'FemoFestaWebSocketApi', {
       apiName: `femo-festa-ws-${props.stage}`,
