@@ -54,6 +54,7 @@ export class WebSocketStack extends Stack {
     props.connectionsTable.grantWriteData(connectFn);
     props.connectionsTable.grantWriteData(disconnectFn);
     props.connectionsTable.grantReadData(broadcastFn);
+    wsApi.grantManageConnections(broadcastFn);
 
     // broadcastFn.addToRolePolicy(new iam.PolicyStatement({
     //   actions: ['execute-api:ManageConnections'],
