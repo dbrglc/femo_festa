@@ -47,7 +47,7 @@ export class WebSocketStack extends Stack {
       environment: {
         STAGE: props.stage,
         WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
-        API_GATEWAY_ENDPOINT_URL: wsApi.apiEndpoint.replace(/^wss:/, 'https:')
+        API_GATEWAY_ENDPOINT_URL: `https://${wsApi.apiId}.execute-api.${this.region}.amazonaws.com/${props.stage}`
       }
     });
     
