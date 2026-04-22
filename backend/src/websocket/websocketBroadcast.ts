@@ -7,9 +7,9 @@ import type { WebSocketConnection, WebSocketUpdate } from '@repo/shared';
 const region = process.env.AWS_REGION || 'eu-south-1';
 const dynamoClient = new DynamoDBClient({ region });
 const apiGatewayClient = new ApiGatewayManagementApiClient({
-    region,
-    endpoint: process.env.API_GATEWAY_ENDPOINT_URL,
-    });
+  region,
+  endpoint: process.env.API_GATEWAY_ENDPOINT_URL,
+});
 
 /**
  * Legge tutte le connessioni WebSocket da DynamoDB e invia un update a tutte via API Gateway.
@@ -51,11 +51,11 @@ export const broadcastHandler = async (payload: WebSocketUpdate): Promise<void> 
         successCount++;
       } catch (connectionError) {
         // Se la connessione è non valida o chiusa, la rimuove da DynamoDB
-        if (connectionError instanceof Error && 
-            (connectionError.message.includes('GoneException') || 
-             connectionError.message.includes('not found'))) {
+        if (connectionError instanceof Error &&
+          (connectionError.message.includes('GoneException') ||
+            connectionError.message.includes('not found'))) {
           console.warn(`Connessione chiusa, rimozione: ${connection.connectionId}`);
-          
+
           try {
             const deleteCommand = new DeleteItemCommand({
               TableName: tableName,

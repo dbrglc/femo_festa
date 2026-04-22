@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'; 
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
@@ -35,6 +36,10 @@ export class WebSocketStack extends Stack {
       }
     });
 
+    const wsApi = new apigwv2.WebSocketApi(this, 'FemoFestaWebSocketApi', {
+      apiName: `femo-festa-ws-${props.stage}`,
+    });
+    
     const broadcastFn = new NodejsFunction(this, 'BroadcastHandler', {
       runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/websocket/websocketBroadcast.ts',
@@ -42,6 +47,7 @@ export class WebSocketStack extends Stack {
       environment: {
         STAGE: props.stage,
         WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
+        API_GATEWAY_ENDPOINT_URL: wsApi.apiEndpoint.replace(/^wss:/, 'https:')
       }
     });
     
@@ -49,10 +55,14 @@ export class WebSocketStack extends Stack {
     props.connectionsTable.grantWriteData(disconnectFn);
     props.connectionsTable.grantReadData(broadcastFn);
 
-    const wsApi = new apigwv2.WebSocketApi(this, 'FemoFestaWebSocketApi', {
-      apiName: `femo-festa-ws-${props.stage}`,
-    });
-
+    // broadcastFn.addToRolePolicy(new iam.PolicyStatement({
+    //   actions: ['execute-api:ManageConnections'],
+    //   resources: [
+    //     cdk.Fn.sub('arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiId}/*', {
+    //       ApiId: wsApi.apiId,
+    //     }),
+    //   ],
+    // }));
     wsApi.addRoute('$connect', {
       integration: new integrations.WebSocketLambdaIntegration('ConnectIntegration', connectFn),
     });
