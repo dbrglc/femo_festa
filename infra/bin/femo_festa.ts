@@ -17,5 +17,5 @@ const env = {
 const dynamo = new DynamoStack(app, `FemoFesta-Dynamo-${stage}`, { env, stage });
 const auth = new AuthStack(app, `FemoFesta-Auth-${stage}`, { env, stage });
 const websocket = new WebSocketStack(app, `FemoFesta-WebSocket-${stage}`, { env, stage, connectionsTable: dynamo.connectionsTable, leaderboardTable: dynamo.leaderboardTable });
-const api = new ApiStack(app, `FemoFesta-Api-${stage}`, { env, stage, userPool: auth.userPool, leaderboardTable: dynamo.leaderboardTable, broadcastFunctionName: websocket.broadcastFunction });
+const api = new ApiStack(app, `FemoFesta-Api-${stage}`, { env, stage, userPool: auth.userPool, leaderboardTable: dynamo.leaderboardTable, broadcastFunction: websocket.broadcastFunction });
 new FrontendStack(app, `FemoFesta-Frontend-${stage}`, { env, stage });

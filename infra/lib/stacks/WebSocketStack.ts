@@ -60,6 +60,7 @@ export class WebSocketStack extends Stack {
 
     props.connectionsTable.grantWriteData(connectFn);
     props.leaderboardTable.grantReadData(connectFn);
+    this.broadcastFunction.grantInvoke(connectFn);
 
     wsApi.grantManageConnections(connectFn);
 

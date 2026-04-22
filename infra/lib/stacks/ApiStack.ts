@@ -10,7 +10,7 @@ interface ApiStackProps extends StackProps {
   stage: string;
   userPool: cognito.UserPool;
   leaderboardTable: cdk.aws_dynamodb.Table;
-  broadcastFunctionName: cdk.aws_lambda.Function;
+  broadcastFunction: cdk.aws_lambda.Function;
 }
 
 export class ApiStack extends Stack {
@@ -24,11 +24,12 @@ export class ApiStack extends Stack {
       environment: {
         STAGE: props.stage,
         LEADERBOARD_TABLE_NAME: props.leaderboardTable.tableName,
-        BROADCAST_FUNCTION_NAME: props.broadcastFunctionName.functionName,
+        BROADCAST_FUNCTION_NAME: props.broadcastFunction.functionName,
       },
     });
 
     props.leaderboardTable.grantReadWriteData(ordersLambda);
+    props.broadcastFunction.grantInvoke(ordersLambda);
 
     const httpApi = new apigwv2.HttpApi(this, 'FemoFestaHttpApi', {
       apiName: `femo-festa-http-${props.stage}`,
