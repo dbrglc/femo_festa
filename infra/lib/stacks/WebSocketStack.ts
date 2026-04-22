@@ -4,10 +4,11 @@ import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'; 
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
 interface WebSocketStackProps extends StackProps {
   stage: string;
-  connectionsTable: string;
+  connectionsTable: dynamodb.Table;
 }
 
 export class WebSocketStack extends Stack {
@@ -20,7 +21,7 @@ export class WebSocketStack extends Stack {
       handler: 'connectHandler',
       environment: {
         STAGE: props.stage,
-        WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable,
+        WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
       }
     });
 
@@ -30,7 +31,7 @@ export class WebSocketStack extends Stack {
       handler: 'disconnectHandler',
       environment: {
         STAGE: props.stage,
-        WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable,
+        WEBSOCKET_CONNECTIONS_TABLE: props.connectionsTable.tableName,
       }
     });
 
