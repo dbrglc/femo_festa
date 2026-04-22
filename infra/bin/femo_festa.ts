@@ -11,11 +11,11 @@ const app = new cdk.App();
 const stage = app.node.tryGetContext('stage') ?? 'dev';
 const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION || 'us-south-1',
+  region: process.env.CDK_DEFAULT_REGION || 'eu-south-1',
 };
 
 const dynamo = new DynamoStack(app, `FemoFesta-Dynamo-${stage}`, { env, stage });
 const auth = new AuthStack(app, `FemoFesta-Auth-${stage}`, { env, stage });
-const api = new ApiStack(app, `FemoFesta-Api-${stage}`, { env, stage, userPool: auth.userPool });
-const websocket = new WebSocketStack(app, `FemoFesta-WebSocket-${stage}`, { env, stage, connectionsTable: dynamo.connectionsTable });
+const websocket = new WebSocketStack(app, `FemoFesta-WebSocket-${stage}`, { env, stage, connectionsTable: dynamo.connectionsTable, leaderboardTable: dynamo.leaderboardTable });
+const api = new ApiStack(app, `FemoFesta-Api-${stage}`, { env, stage, userPool: auth.userPool, leaderboardTable: dynamo.leaderboardTable, broadcastFunctionName: websocket.broadcastFunction });
 new FrontendStack(app, `FemoFesta-Frontend-${stage}`, { env, stage });

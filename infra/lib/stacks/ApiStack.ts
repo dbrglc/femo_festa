@@ -9,6 +9,8 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 interface ApiStackProps extends StackProps {
   stage: string;
   userPool: cognito.UserPool;
+  leaderboardTable: cdk.aws_dynamodb.Table;
+  broadcastFunctionName: cdk.aws_lambda.Function;
 }
 
 export class ApiStack extends Stack {
@@ -19,10 +21,19 @@ export class ApiStack extends Stack {
       runtime: lambda.Runtime.NODEJS_24_X,
       entry: '../backend/src/submitOrder.ts',
       handler: 'handler',
+      bundling: {
+        minify: false,
+        sourceMap: false,
+        externalModules: []
+      },
       environment: {
         STAGE: props.stage,
+        LEADERBOARD_TABLE_NAME: props.leaderboardTable.tableName,
+        BROADCAST_FUNCTION_NAME: props.broadcastFunctionName.functionName,
       },
     });
+
+    props.leaderboardTable.grantReadWriteData(ordersLambda);
 
     const httpApi = new apigwv2.HttpApi(this, 'FemoFestaHttpApi', {
       apiName: `femo-festa-http-${props.stage}`,
