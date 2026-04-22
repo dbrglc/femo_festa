@@ -16,7 +16,7 @@ const apiGatewayClient = new ApiGatewayManagementApiClient({
  * Gestisce gracefully le connessioni non valide o chiuse.
  * @param payload - Payload da inviare alle connessioni (es. WebSocketUpdate)
  */
-export const broadcastUpdate = async (payload: WebSocketUpdate): Promise<void> => {
+export const broadcastHandler = async (payload: WebSocketUpdate): Promise<void> => {
   try {
     // Valida le variabili di ambiente richieste
     const tableName = process.env.WEBSOCKET_CONNECTIONS_TABLE;
@@ -74,6 +74,6 @@ export const broadcastUpdate = async (payload: WebSocketUpdate): Promise<void> =
 
     console.log(`Broadcast completato: ${successCount} successi, ${failureCount} fallimenti`);
   } catch (error) {
-    console.error('Errore in broadcastUpdate:', error);
+    console.error('Errore in broadcastHandler:', error);
   }
 };
