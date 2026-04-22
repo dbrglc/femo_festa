@@ -14,9 +14,8 @@ const env = {
   region: process.env.CDK_DEFAULT_REGION || 'us-south-1',
 };
 
-const leaderboardTable = 'femo-festa-leaderboard-{stage}';
-
-const connectionsTable = 'femo-festa-connections-{stage}';
+const leaderboardTable = `femo-festa-leaderboard-${stage}`;
+const connectionsTable = `femo-festa-connections-${stage}`;
 
 const dynamo = new DynamoStack(app, `FemoFesta-Dynamo-${stage}`, { env, stage, leaderboardTable, connectionsTable });
 const auth = new AuthStack(app, `FemoFesta-Auth-${stage}`, { env, stage });
