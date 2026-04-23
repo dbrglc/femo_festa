@@ -21,13 +21,33 @@ export class FrontendStack extends Stack {
       autoDeleteObjects: true,
     });
 
-    // 2. CloudFront con accesso sicuro (OAC)
+    const oac = new cloudfront.S3OriginAccessControl(this, 'OAC', {
+      description: 'Frontend OAC',
+    });
+
+    const origin = origins.S3BucketOrigin.withOriginAccessControl(siteBucket, {
+      originAccessControl: oac,
+    });
+
     const distribution = new cloudfront.Distribution(this, 'FrontendDistribution', {
       defaultBehavior: {
-        origin: origins.S3BucketOrigin.withOriginAccessControl(siteBucket),
+        origin: origin,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
     });
+
+    distribution.node.addDependency(siteBucket);
+
+    siteBucket.addToResourcePolicy(new cdk.aws_iam.PolicyStatement({
+      actions: ['s3:GetObject'],
+      resources: [siteBucket.arnForObjects('*')],
+      principals: [new cdk.aws_iam.ServicePrincipal('cloudfront.amazonaws.com')],
+      conditions: {
+        StringEquals: {
+          'AWS:SourceArn': distribution.distributionArn,
+        },
+      },
+    }));
 
     new cdk.CfnOutput(this, 'FrontendBucketName', {
       value: siteBucket.bucketName,
