@@ -1,9 +1,10 @@
 const COGNITO_DOMAIN = import.meta.env.PUBLIC_COGNITO_DOMAIN;
 const CLIENT_ID = import.meta.env.PUBLIC_COGNITO_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.PUBLIC_COGNITO_REDIRECT_URI;
+const RESPONSE_TYPE = 'token';
 
 export function getLoginUrl(): string {
-  return `${COGNITO_DOMAIN}/login?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+  return `${COGNITO_DOMAIN}/login?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
 }
 
 export function logout(): void {
