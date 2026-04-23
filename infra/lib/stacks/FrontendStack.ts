@@ -36,8 +36,6 @@ export class FrontendStack extends Stack {
       },
     });
 
-    distribution.node.addDependency(siteBucket);
-
     siteBucket.addToResourcePolicy(new cdk.aws_iam.PolicyStatement({
       actions: ['s3:GetObject'],
       resources: [siteBucket.arnForObjects('*')],
