@@ -22,7 +22,7 @@ on:
 permissions:
   id-token: write
   contents: read
-  
+
 jobs:
   # Run on develop branch push OR manual workflow_dispatch with development environment
   deploy-dev:
@@ -66,25 +66,18 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Get CloudFront Distribution ID and S3 Bucket
-        id: cdk-outputs
-        run: |
-          BUCKET_NAME=${{ vars.FRONTEND_BUCKET_NAME }}
-          DIST_ID=${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
-
       - name: Deploy to S3
         run: |
-          aws s3 sync frontend/dist s3://${{ steps.cdk-outputs.outputs.bucket_name }} \
+          aws s3 sync frontend/dist s3://${{ vars.FRONTEND_BUCKET_NAME }} \
             --delete \
             --cache-control "public, max-age=3600" \
             --exclude ".git/*" \
             --exclude "node_modules/*"
 
       - name: Invalidate CloudFront cache
-        if: steps.cdk-outputs.outputs.distribution_id != ''
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ steps.cdk-outputs.outputs.distribution_id }} \
+            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
 
   # Run on main branch push OR manual workflow_dispatch with production environment
@@ -129,23 +122,16 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Get CloudFront Distribution ID and S3 Bucket
-        id: cdk-outputs
-        run: |
-          BUCKET_NAME=${{ vars.FRONTEND_BUCKET_NAME }}
-          DIST_ID=${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
-
       - name: Deploy to S3
         run: |
-          aws s3 sync frontend/dist s3://${{ steps.cdk-outputs.outputs.bucket_name }} \
+          aws s3 sync frontend/dist s3://${{ vars.FRONTEND_BUCKET_NAME }} \
             --delete \
             --cache-control "public, max-age=3600" \
             --exclude ".git/*" \
             --exclude "node_modules/*"
 
       - name: Invalidate CloudFront cache
-        if: steps.cdk-outputs.outputs.distribution_id != ''
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ steps.cdk-outputs.outputs.distribution_id }} \
+            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
