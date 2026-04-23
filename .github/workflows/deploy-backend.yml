@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
     paths:
       - 'backend/**'
       - 'infra/**'
@@ -26,7 +27,7 @@ permissions:
 
 jobs:
   # Run on develop branch push OR manual workflow_dispatch with development environment
-  build-dev:
+  deploy-dev:
     if: |
       (github.ref == 'refs/heads/develop' && github.event_name == 'push') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev')
@@ -85,7 +86,7 @@ jobs:
           npx cdk deploy --all --require-approval never
 
   # Run on main branch push OR manual workflow_dispatch with production environment
-  build-prod:
+  deploy-prod:
     if: |
       (github.ref == 'refs/heads/main' && github.event_name == 'push') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod')

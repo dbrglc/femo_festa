@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
     paths:
       - 'frontend/**'
       - '.github/workflows/deploy-frontend.yml'
@@ -20,7 +21,7 @@ on:
 
 jobs:
   # Run on develop branch push OR manual workflow_dispatch with development environment
-  build-dev:
+  deploy-dev:
     if: |
       (github.ref == 'refs/heads/develop' && github.event_name == 'push') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev')
@@ -31,6 +32,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ vars.PUBLIC_AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_DEPLOY_ROLE_NAME }}
 
       - name: Use Node.js
         uses: actions/setup-node@v5
@@ -54,14 +62,29 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-build-dev
-          path: frontend/dist
+      - name: Get CloudFront Distribution ID and S3 Bucket
+        id: cdk-outputs
+        run: |
+          BUCKET_NAME=${{ vars.FRONTEND_BUCKET_NAME }}
+          DIST_ID=${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync frontend/dist s3://${{ steps.cdk-outputs.outputs.bucket_name }} \
+            --delete \
+            --cache-control "public, max-age=3600" \
+            --exclude ".git/*" \
+            --exclude "node_modules/*"
+
+      - name: Invalidate CloudFront cache
+        if: steps.cdk-outputs.outputs.distribution_id != ''
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ steps.cdk-outputs.outputs.distribution_id }} \
+            --paths "/*"
 
   # Run on main branch push OR manual workflow_dispatch with production environment
-  build-prod:
+  deploy-prod:
     if: |
       (github.ref == 'refs/heads/main' && github.event_name == 'push') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod')
@@ -72,6 +95,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ vars.PUBLIC_AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_DEPLOY_ROLE_NAME }}
 
       - name: Use Node.js
         uses: actions/setup-node@v5
@@ -95,8 +125,23 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-build-prod
-          path: frontend/dist
+      - name: Get CloudFront Distribution ID and S3 Bucket
+        id: cdk-outputs
+        run: |
+          BUCKET_NAME=${{ vars.FRONTEND_BUCKET_NAME }}
+          DIST_ID=${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync frontend/dist s3://${{ steps.cdk-outputs.outputs.bucket_name }} \
+            --delete \
+            --cache-control "public, max-age=3600" \
+            --exclude ".git/*" \
+            --exclude "node_modules/*"
+
+      - name: Invalidate CloudFront cache
+        if: steps.cdk-outputs.outputs.distribution_id != ''
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ steps.cdk-outputs.outputs.distribution_id }} \
+            --paths "/*"
