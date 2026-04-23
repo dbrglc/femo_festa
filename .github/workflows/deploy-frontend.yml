@@ -19,6 +19,10 @@ on:
           - dev
           - prod
 
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   # Run on develop branch push OR manual workflow_dispatch with development environment
   deploy-dev:
