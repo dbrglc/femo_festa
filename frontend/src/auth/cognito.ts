@@ -1,13 +1,9 @@
-const COGNITO_DOMAIN = 'https://your-auth-domain.auth.us-east-1.amazoncognito.com';
-const CLIENT_ID = 'YOUR_COGNITO_APP_CLIENT_ID';
-const REDIRECT_URI = `${window.location.origin}/order`;
-const RESPONSE_TYPE = 'token';
-const SCOPE = 'openid email';
+const COGNITO_DOMAIN = import.meta.env.PUBLIC_COGNITO_DOMAIN;
+const CLIENT_ID = import.meta.env.PUBLIC_COGNITO_CLIENT_ID;
+const REDIRECT_URI = import.meta.env.PUBLIC_COGNITO_REDIRECT_URI;
 
 export function getLoginUrl(): string {
-  return `${COGNITO_DOMAIN}/login?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(
-    SCOPE,
-  )}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+  return `${COGNITO_DOMAIN}/login?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
 }
 
 export function logout(): void {

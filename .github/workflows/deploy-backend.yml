@@ -8,14 +8,29 @@ on:
       - 'backend/**'
       - 'infra/**'
       - 'shared/**'
+      - '.github/workflows/deploy-backend.yml'
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  build:
+  # Run on develop branch push OR manual workflow_dispatch with development environment
+  build-dev:
+    if: |
+      (github.ref == 'refs/heads/develop' && github.event_name == 'push') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev')
+    
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -57,18 +72,74 @@ jobs:
           cd infra
           npx cdk synth
 
-      - name: Configure AWS Credentials for Milan region audience
+      - name: Configure AWS Credentials (Development)
         uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
           audience: sts.amazonaws.com
-          aws-region: eu-south-1
-          role-to-assume: arn:aws:iam::874456855336:role/github_actions_deploy
+          aws-region: ${{ vars.PUBLIC_AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_DEPLOY_ROLE_NAME }}
 
-      - name: Get caller identity
+      - name: Deploy CDK stack (Development)
         run: |
-          aws sts get-caller-identity
+          cd infra
+          npx cdk deploy --all --require-approval never
 
-      - name: Deploy CDK stack
+  # Run on main branch push OR manual workflow_dispatch with production environment
+  build-prod:
+    if: |
+      (github.ref == 'refs/heads/main' && github.event_name == 'push') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'prod')
+    
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: Install share dependencies
+        run: |
+          cd shared
+          npm install
+
+      - name: Build shared
+        run: |
+          cd shared
+          npm run build
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Install infra dependencies
+        run: |
+          cd infra
+          npm install
+
+      - name: Build backend
+        run: |
+          cd backend
+          npm run build
+
+      - name: Synthesize CDK
+        run: |
+          cd infra
+          npx cdk synth
+
+      - name: Configure AWS Credentials (Production)
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ vars.PUBLIC_AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_DEPLOY_ROLE_NAME }}
+
+      - name: Deploy CDK stack (Production)
         run: |
           cd infra
           npx cdk deploy --all --require-approval never
