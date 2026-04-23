@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import * as authorizers from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -9,6 +10,7 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 interface ApiStackProps extends StackProps {
   stage: string;
   userPool: cognito.UserPool;
+  appClient: cognito.UserPoolClient;
   leaderboardTable: cdk.aws_dynamodb.Table;
   broadcastFunction: cdk.aws_lambda.Function;
 }
@@ -31,6 +33,14 @@ export class ApiStack extends Stack {
     props.leaderboardTable.grantReadWriteData(ordersLambda);
     props.broadcastFunction.grantInvoke(ordersLambda);
 
+    const cognitoAuthorizer = new authorizers.HttpUserPoolAuthorizer(
+      'FemoFestaAuthorizer',
+      props.userPool,
+      {
+        userPoolClients: [props.appClient],
+      }
+    );
+
     const httpApi = new apigwv2.HttpApi(this, 'FemoFestaHttpApi', {
       apiName: `femo-festa-http-${props.stage}`,
       createDefaultStage: true,
@@ -40,6 +50,7 @@ export class ApiStack extends Stack {
       path: '/orders',
       methods: [apigwv2.HttpMethod.POST],
       integration: new integrations.HttpLambdaIntegration('OrdersIntegration', ordersLambda),
+      authorizer: cognitoAuthorizer,
     });
 
     new cdk.CfnOutput(this, 'HttpApiUrl', { value: httpApi.apiEndpoint });

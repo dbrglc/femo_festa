@@ -2,7 +2,6 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBClient, UpdateItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { validateJwt } from './jwtValidator.js';
 import type { Order, WebSocketUpdate, Team } from '@repo/shared';
 
 // Inizializza client AWS
@@ -14,13 +13,6 @@ export const handler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
   try {
-    const authHeader = event.headers.Authorization || event.headers.authorization;
-    if (!authHeader) {
-      return { statusCode: 401, body: 'Authorization header missing' };
-    }
-
-    validateJwt(authHeader);
-
     const body = event.body ? JSON.parse(event.body) : null;
     const order = body as Order;
 

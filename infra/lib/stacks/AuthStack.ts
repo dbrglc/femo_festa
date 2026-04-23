@@ -8,6 +8,7 @@ interface AuthStackProps extends StackProps {
 
 export class AuthStack extends Stack {
   public readonly userPool: cognito.UserPool;
+  public readonly appClient: cognito.UserPoolClient;
 
   constructor(scope: cdk.App, id: string, props: AuthStackProps) {
     super(scope, id, props);
@@ -19,7 +20,7 @@ export class AuthStack extends Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    const appClient = this.userPool.addClient('FemoFestaAppClient', {
+    this.appClient = this.userPool.addClient('FemoFestaAppClient', {
       authFlows: { userPassword: true },
       oAuth: {
         callbackUrls: ['https://your-frontend-domain/order'],
@@ -37,6 +38,6 @@ export class AuthStack extends Stack {
     });
 
     new cdk.CfnOutput(this, 'UserPoolId', { value: this.userPool.userPoolId });
-    new cdk.CfnOutput(this, 'ClientId', { value: appClient.userPoolClientId });
+    new cdk.CfnOutput(this, 'ClientId', { value: this.appClient.userPoolClientId });
   }
 }
