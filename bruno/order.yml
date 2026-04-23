@@ -14,8 +14,19 @@ http:
         "score": 12
       }
   auth:
-    type: bearer
-    token: ""
+    type: oauth2
+    flow: implicit
+    authorizationUrl: "{{login-auth-url}}"
+    callbackUrl: "{{login-redirect-url}}"
+    credentials:
+      clientId: "{{login-client-id}}"
+    tokenConfig:
+      id: credentials
+      placement:
+        header: Bearer
+      source: access_token
+    settings:
+      autoFetchToken: true
 
 settings:
   encodeUrl: true
