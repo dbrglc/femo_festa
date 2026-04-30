@@ -4,14 +4,17 @@ const REDIRECT_URI = import.meta.env.PUBLIC_COGNITO_REDIRECT_URI;
 const RESPONSE_TYPE = 'token';
 
 export function getLoginUrl(): string {
+  console.log('Generating login URL with the following parameters:');
+  console.log(`COGNITO_DOMAIN: ${COGNITO_DOMAIN}`);
+  console.log(`CLIENT_ID: ${CLIENT_ID}`);
+  console.log(`REDIRECT_URI: ${REDIRECT_URI}`);
   return `${COGNITO_DOMAIN}/login?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
 }
 
 export function logout(): void {
   localStorage.removeItem('cognito_access_token');
-  window.location.href = `${COGNITO_DOMAIN}/logout?client_id=${CLIENT_ID}&logout_uri=${encodeURIComponent(
-    window.location.origin,
-  )}`;
+  window.location.href = `${COGNITO_DOMAIN}/logout?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&logout_uri=${encodeURIComponent(
+    window.location.origin)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
 }
 
 export function storeAccessToken(token: string): void {

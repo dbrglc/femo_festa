@@ -30,10 +30,18 @@ export class FrontendStack extends Stack {
     });
 
     const distribution = new cloudfront.Distribution(this, 'FrontendDistribution', {
+      defaultRootObject: 'index.html',
       defaultBehavior: {
         origin: origin,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
+      errorResponses: [
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+        },
+      ],
     });
 
     siteBucket.addToResourcePolicy(new cdk.aws_iam.PolicyStatement({
