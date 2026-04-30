@@ -1,8 +1,41 @@
-import { useWebSocket } from '../hooks/useWebSocket.ts';
 import type { Team, WebSocketUpdate } from '@repo/shared';
 
-const API_LEADERBOARD = '/leaderboard';
-const WS_URL = import.meta.env.PUBLIC_WS_URL || 'wss://{{WS_ENDPOINT}}';
+const WS_URL = import.meta.env.PUBLIC_WS_URL 
+  ? `${import.meta.env.PUBLIC_WS_URL}`
+  : 'wss://boh';
+console.log(import.meta.env.PUBLIC_WS_URL);
+console.log(WS_URL);
+
+export type MessageHandler = (payload: any) => void;
+
+export function useWebSocket(url: string, onMessage: MessageHandler) {
+  let socket: WebSocket | null = null;
+
+  const connect = () => {
+    socket = new WebSocket(url);
+    socket.addEventListener('message', (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        onMessage(data);
+      } catch (error) {
+        console.warn('WebSocket parse failed', error);
+      }
+    });
+    socket.addEventListener('close', () => {
+      setTimeout(connect, 2000);
+    });
+  };
+
+  connect();
+
+  return {
+    close: () => {
+      if (socket) {
+        socket.close();
+      }
+    },
+  };
+}
 
 function renderRows(leaderboard: Team[]) {
   return leaderboard
@@ -38,25 +71,6 @@ export async function initLeaderboard(selector: string) {
     return;
   }
 
-  // Fetch iniziale della leaderboard
-  const fetchLeaderboard = async () => {
-    try {
-      const response = await fetch(API_LEADERBOARD);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      const data = await response.json();
-      const leaderboard = Array.isArray(data) ? data : data.leaderboard || [];
-      tbody.innerHTML = renderRows(leaderboard);
-    } catch (error) {
-      console.error('Failed to fetch leaderboard:', error);
-      tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; color: red;">Errore nel caricamento</td></tr>';
-    }
-  };
-
-  // Carica la leaderboard al init
-  await fetchLeaderboard();
-
   // Connette WebSocket e gestisce aggiornamenti real-time
   const socket = useWebSocket(WS_URL, (message: WebSocketUpdate) => {
     try {
@@ -78,8 +92,3 @@ export async function initLeaderboard(selector: string) {
     },
   };
 }
-
-// Uso nel page component:
-// import { initLeaderboard } from '../components/Leaderboard.ts';
-// const leaderboard = await initLeaderboard('#leaderboard-container');
-// // Cleanup se necessario: leaderboard?.close();

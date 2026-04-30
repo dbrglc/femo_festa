@@ -1,5 +1,4 @@
 ---
-import { getLoginUrl, logout, getAccessToken, parseHashToken } from '../auth/cognito.ts';
 const title = 'Area ordini';
 ---
 
@@ -107,13 +106,13 @@ const title = 'Area ordini';
       <div id="message"></div>
     </main>
 
-    <script type="module">
+    <script>
       import { 
         getLoginUrl, 
         logout, 
         getAccessToken, 
         parseHashToken 
-      } from '../auth/cognito.ts';
+      } from '../auth/cognito';
 
       // Configurazione API
       const API_BASE_URL = import.meta.env.PUBLIC_API_URL || 'https://{{REST_API_URL}}';

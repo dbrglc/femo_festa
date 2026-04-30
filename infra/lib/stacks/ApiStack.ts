@@ -44,6 +44,22 @@ export class ApiStack extends Stack {
     const httpApi = new apigwv2.HttpApi(this, 'FemoFestaHttpApi', {
       apiName: `femo-festa-http-${props.stage}`,
       createDefaultStage: true,
+      corsPreflight: {
+        allowHeaders: [
+          'Content-Type',
+          'Authorization',
+          'X-Amz-Date',
+          'X-Api-Key',
+          'X-Amz-Security-Token',
+        ],
+        allowMethods: [
+          apigwv2.CorsHttpMethod.POST,
+          apigwv2.CorsHttpMethod.GET,
+          apigwv2.CorsHttpMethod.OPTIONS,
+        ],
+        allowOrigins: ['*'],
+        allowCredentials: true,
+      },
     });
 
     httpApi.addRoutes({

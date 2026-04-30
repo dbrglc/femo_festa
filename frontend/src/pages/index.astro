@@ -1,5 +1,4 @@
 ---
-import { initLeaderboard } from '../components/Leaderboard.ts';
 const title = 'Classifica pubblica';
 ---
 <!DOCTYPE html>
@@ -14,8 +13,8 @@ const title = 'Classifica pubblica';
       <h1>{title}</h1>
       <div id="leaderboard"></div>
     </main>
-    <script type="module">
-      import { initLeaderboard } from '../components/Leaderboard.ts';
+    <script>
+      import { initLeaderboard } from '../components/Leaderboard';
       initLeaderboard('#leaderboard');
     </script>
   </body>
