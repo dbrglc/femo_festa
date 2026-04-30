@@ -57,7 +57,7 @@ export class ApiStack extends Stack {
           apigwv2.CorsHttpMethod.GET,
           apigwv2.CorsHttpMethod.OPTIONS,
         ],
-        allowOrigins: ['*'],
+        allowOrigins: ['http://localhost:4321', 'https://d3g7zpnlh34vfc.cloudfront.net'],
         allowCredentials: true,
       },
     });
