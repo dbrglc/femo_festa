@@ -29,13 +29,44 @@ export class FrontendStack extends Stack {
       originAccessControl: oac,
     });
 
+    const rewriteFunction = new cloudfront.Function(this, 'RewriteFunction', {
+      code: cloudfront.FunctionCode.fromInline(`
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+
+  // Se termina con "/" → aggiungi index.html
+  if (uri.endsWith('/')) {
+    request.uri += 'index.html';
+  } 
+  // Se NON ha estensione → aggiungi /index.html
+  else if (!uri.includes('.')) {
+    request.uri += '/index.html';
+  }
+
+  return request;
+}
+`),
+    });
+
     const distribution = new cloudfront.Distribution(this, 'FrontendDistribution', {
       defaultRootObject: 'index.html',
       defaultBehavior: {
         origin: origin,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        functionAssociations: [
+          {
+            function: rewriteFunction,
+            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+          },
+        ],
       },
       errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+        },
         {
           httpStatus: 404,
           responseHttpStatus: 200,

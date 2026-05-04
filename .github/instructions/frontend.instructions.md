@@ -29,24 +29,26 @@ Submit → POST /orders con Bearer token → Response (success/error) →
 Messaggio mostrato → Leaderboard aggiorna live via WebSocket
 ```
 
-#### 2️⃣ Componente Leaderboard con WebSocket Real-Time
+#### 2️⃣ Componente LeaderboardAnimated con WebSocket Real-Time
 
-**File**: `frontend/src/components/Leaderboard.ts`
+**File**: `frontend/src/components/LeaderboardAnimated.ts`
 
 **Funzionalità**:
-- ✅ Tabella HTML dinamica (Squadra, Punteggio)
-- ✅ Fetch iniziale leaderboard da API REST `/leaderboard`
+- ✅ Podio animato (top 3 barre verticali con corona)
+- ✅ Lista ranking dal 4° in poi
 - ✅ Connessione WebSocket a endpoint dinamico
+- ✅ Fetch iniziale leaderboard dal primo messaggio WebSocket
 - ✅ Real-time update quando tipo messaggio = `LEADERBOARD_UPDATE`
+- ✅ Animazioni al cambio di posizione (300-500ms)
 - ✅ Auto-reconnect ogni 2 secondi se disconnesso
-- ✅ Error handling su fetch e WebSocket
 - ✅ Cleanup function ritornata per eventuali close manuali
 
 **Workflow**:
 ```
-Page Load → Fetch GET /leaderboard → Tabella renderizzata iniziale →
-WebSocket connetti → Attendi messaggi → Se type=LEADERBOARD_UPDATE →
-Estrai payload.leaderboard → Update tbody con renderRows() → 
+Page Load → WebSocket connetti → Primo messaggio = LEADERBOARD_UPDATE
+→ Estrai payload.leaderboard → Podio + Lista renderizzati iniziali →
+Attendi messaggi → Se type=LEADERBOARD_UPDATE → calculatePositionChange() →
+Assegna animazioni → CSS @keyframes eseguono animazione →
 Leaderboard visibile sempre aggiornata
 ```
 
@@ -76,13 +78,11 @@ Leaderboard visibile sempre aggiornata
    - Messaggi di feedback con emoji
    - Validazione form e token
 
-2. **`frontend/src/components/Leaderboard.ts`**
-   - Fetch iniziale della leaderboard
-   - Connessione WebSocket
+2. **`frontend/src/components/LeaderboardAnimated.ts`**
+   - Connessione WebSocket per leaderboard
+   - Fetch iniziale dal primo messaggio WebSocket
    - Real-time update su messaggi LEADERBOARD_UPDATE
-   - Error handling su fetch e WebSocket
-   - Auto-reconnect configurato
-   - Cleanup function
+   - Rendering podio e lista con animazioni
 
 ---
 
@@ -96,8 +96,8 @@ Leaderboard visibile sempre aggiornata
 │  ┌──────────────────────┐        ┌──────────────────────┐  │
 │  │  /order (Insert)     │        │  / (Leaderboard)     │  │
 │  ├──────────────────────┤        ├──────────────────────┤  │
-│  │ - Cognito Login      │        │ - GET /leaderboard   │  │
-│  │ - Form Insert Score  │        │ - WebSocket Connect  │  │
+│  │ - Cognito Login      │        │ - WebSocket Connect  │  │
+│  │ - Form Insert Score  │        │ - Initial Fetch      │  │
 │  │ - POST /orders       │        │ - Real-time Update   │  │
 │  │ - JWT Bearer Token   │        │                      │  │
 │  └──────────────────────┘        └──────────────────────┘  │

@@ -233,6 +233,7 @@ export async function initLeaderboard(selector: string) {
   };
 
   // Connette WebSocket e gestisce aggiornamenti real-time
+  // La fetch iniziale della leaderboard avverrà tramite il primo messaggio WebSocket
   const socket = useWebSocket(WS_URL, (message: WebSocketUpdate) => {
     try {
       if (message.type === 'LEADERBOARD_UPDATE' && message.payload?.leaderboard) {
@@ -243,21 +244,6 @@ export async function initLeaderboard(selector: string) {
       console.warn('Error processing WebSocket message:', error);
     }
   });
-
-  // Fetch iniziale della leaderboard
-  try {
-    const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://api.example.com';
-    const response = await fetch(`${apiUrl}/leaderboard`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch leaderboard: ${response.statusText}`);
-    }
-    const data = await response.json();
-    if (data.leaderboard) {
-      updateLeaderboard(data.leaderboard);
-    }
-  } catch (error) {
-    console.error('Error fetching initial leaderboard:', error);
-  }
 
   // Ritorna una funzione per il cleanup
   return {
